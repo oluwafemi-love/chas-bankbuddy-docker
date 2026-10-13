@@ -1,0 +1,56 @@
+
+services:
+  nextjs:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:3001
+    ports:
+      - "3000:3000"
+    depends_on:
+      - express
+    restart: unless-stopped
+
+  express:
+    build:
+      context: ./backend
+    environment:
+      PORT: "3001"
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_USER: ${MYSQL_USER:?Set MYSQL_USER in .env}
+      DB_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
+      DB_NAME: ${MYSQL_DATABASE:-bankbuddy}
+    ports:
+      - "3001:3001"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-bankbuddy}
+      MYSQL_USER: ${MYSQL_USER:?Set MYSQL_USER in .env}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
+    ports:
+      - "3309:3306"
+    volumes:
+      - bankbuddy-data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mysqladmin ping -h localhost -uroot -p$${MYSQL_ROOT_PASSWORD} --silent"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    restart: unless-stopped
+
+volumes:
+  bankbuddy-data:
