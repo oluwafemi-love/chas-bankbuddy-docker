@@ -1,22 +1,26 @@
 # BankBuddy App
 
 ## Tech Stack
-- Frontend: Next.js
-- Backend: Express
+- Frontend: Next.js 16, React 19, TypeScript
+- Backend: Express 5, Node.js ES modules
 - Database: MySQL
  
 
-### AWS
-- Process manager: PM2
-
-
 ## Deployment
 
-The frontend and backend are deployed on an AWS EC2 instance.
+BankBuddy is deployed on an AWS EC2 instance, with the frontend and backend running in separate Docker containers.
 
+- Containerization: Docker Compose manages the production containers for the frontend and backend.
+
+- Reverse Proxy: Nginx handles incoming HTTP requests and routes traffic to the appropriate application service.
+
+- Process Management & Rollback: PM2 is retained as an alternative process-management setup to support potential rollback or recovery if needed.
+  
+  
+## Link
 - https://13-63-79-123.sslip.io
 
-PM2 keeps both the frontend and backend running in the background.
+
 
 
 

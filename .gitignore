@@ -6,3 +6,4 @@ frontend/.next/
 .env
 .env.*
 !.env.example
+*.tar.gz
