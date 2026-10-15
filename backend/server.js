@@ -81,7 +81,6 @@ app.post("/users", async (req, res) => {
 //Login Session Route
 app.post("/sessions", async (req, res) => {
   console.log("POST /sessions received");
-  console.log("Request body:", req.body);
 
   const { username, password } = req.body;
   try {
