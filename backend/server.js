@@ -25,6 +25,15 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 app.use(bodyParser.json());
 
+// Public feature flags: expose only safe boolean values.
+app.get("/feature-flags", (req, res) => {
+  res.set("Cache-Control", "no-store");
+
+  res.json({
+    newDashboard: process.env.FEATURE_NEW_DASHBOARD === "true",
+  });
+});
+
 //HELPER FUNCTIONS
 // Generate one-time password
 function generateOTP() {

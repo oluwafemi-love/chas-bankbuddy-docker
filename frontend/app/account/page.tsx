@@ -1,13 +1,41 @@
 "use client";
 
 import React from "react";
-import { getAccount } from "@/app/lib/client";
-import { depositMoney } from "@/app/lib/client";
+import {
+  getAccount,
+  depositMoney,
+  getFeatureFlags,
+} from "@/app/lib/client";
 
 export default function AccountPage() {
   const [balance, setBalance] = React.useState(0);
   const [amount, setAmount] = React.useState("");
   const [username, setUsername] = React.useState("");
+  const [newDashboardEnabled, setNewDashboardEnabled] =
+    React.useState(false);
+
+  React.useEffect(() => {
+    let active = true;
+
+    async function loadFeatureFlags() {
+      try {
+        const flags = await getFeatureFlags();
+
+        if (active) {
+          setNewDashboardEnabled(flags.newDashboard);
+        }
+      } catch (error) {
+        // Fail closed: keep the feature hidden if flags cannot load.
+        console.error("Failed to load feature flags:", error);
+      }
+    }
+
+    loadFeatureFlags();
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   React.useEffect(() => {
     async function loadAccount() {
@@ -129,6 +157,29 @@ export default function AccountPage() {
           </button>
         </form>
       </div>
+      {newDashboardEnabled && (
+        <section
+          aria-labelledby="savings-panel-title"
+          className="mx-auto mb-8 max-w-md rounded-2xl border border-emerald-200 bg-emerald-50 p-6 shadow-sm"
+        >
+          <p className="text-sm font-semibold uppercase tracking-wider text-emerald-700">
+            New feature
+          </p>
+
+          <h2
+            id="savings-panel-title"
+            className="mt-2 text-xl font-bold text-slate-900"
+          >
+            Savings spotlight
+          </h2>
+
+          <p className="mt-2 text-sm leading-6 text-slate-700">
+            Small, consistent steps can help you build better saving
+            habits. Consider setting a savings goal and reviewing your
+            progress regularly.
+          </p>
+        </section>
+      )}
     </div>
   );
 }

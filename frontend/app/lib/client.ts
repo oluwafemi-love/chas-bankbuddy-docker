@@ -86,3 +86,17 @@ export async function depositMoney(
 
   return res.json();
 }
+
+export async function getFeatureFlags(): Promise<{
+  newDashboard: boolean;
+}> {
+  const res = await fetch(`${API_URL}/feature-flags`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch feature flags");
+  }
+
+  return res.json();
+}
