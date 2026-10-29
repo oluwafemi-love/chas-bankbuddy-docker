@@ -334,9 +334,14 @@ app.delete("/users", async (req, res) => {
   }
 });
 
-// Start the server
-app.listen(port, () => {
-  console.log(
-    `The bank's backend is running on http://localhost:${port}`,
-  );
-});
+// Export the app so tests can exercise routes without opening a port.
+export default app;
+
+// Start the server when running the application, but not during tests.
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () => {
+    console.log(
+      `The bank's backend is running on http://localhost:${port}`,
+    );
+  });
+}

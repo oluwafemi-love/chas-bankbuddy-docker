@@ -33,17 +33,27 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci --prefix frontend
 
+      - name: Install Playwright Chromium
+        working-directory: frontend
+        run: npx playwright install --with-deps chromium
+
       - name: Lint frontend
         run: npm run lint --prefix frontend
 
       - name: Build frontend
         run: npm run build --prefix frontend
 
+      - name: Run frontend end-to-end tests
+        run: npm run test:e2e --prefix frontend
+
       - name: Install backend dependencies
         run: npm ci --prefix backend
 
       - name: Check backend JavaScript syntax
         run: node --check backend/server.js
+
+      - name: Run backend tests
+        run: npm test --prefix backend
 
   publish:
     name: Build and publish Docker images
