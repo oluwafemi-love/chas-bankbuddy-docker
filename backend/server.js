@@ -23,7 +23,7 @@ const port = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "100kb" }));
 
 // Public feature flags: expose only safe boolean values.
 app.get("/feature-flags", (req, res) => {
@@ -332,6 +332,31 @@ app.delete("/users", async (req, res) => {
       message: "Unable to delete user.",
     });
   }
+});
+
+// Centralized JSON error handling
+app.use((error, req, res, next) => {
+  if (res.headersSent) {
+    return next(error);
+  }
+
+  if (error.type === "entity.too.large") {
+    return res.status(413).json({
+      message: "Request body exceeds the maximum allowed size of 100kb.",
+    });
+  }
+
+  if (error.type === "entity.parse.failed") {
+    return res.status(400).json({
+      message: "Invalid JSON request body.",
+    });
+  }
+
+  console.error("Unhandled application error:", error);
+
+  return res.status(500).json({
+    message: "Internal server error.",
+  });
 });
 
 // Export the app so tests can exercise routes without opening a port.
