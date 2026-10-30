@@ -1,7 +1,7 @@
 import type { ReactNode, ComponentPropsWithoutRef } from "react";
 
 // Hero Component
-type HeroIcon = React.ComponentType<React.SVGProps<SVGSVGElement>>;
+// type HeroIcon = React.ComponentType<React.SVGProps<SVGSVGElement>>;
 
 export interface HeroProps {
   title: string;

@@ -7,3 +7,7 @@ frontend/.next/
 .env.*
 !.env.example
 *.tar.gz
+
+# Playwright artifacts
+/test-results/
+/playwright-report/

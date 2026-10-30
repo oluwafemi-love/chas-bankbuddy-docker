@@ -27,7 +27,7 @@ export default function RegisterPage() {
         password,
       });
 
-      // console.log("User Created: ", user);
+      console.log("User Created: ", user);
 
       //Clear the UI after submission
       clearUI();
