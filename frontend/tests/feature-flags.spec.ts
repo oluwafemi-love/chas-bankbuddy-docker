@@ -1,7 +1,9 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Savings spotlight feature flag", () => {
-  test("shows the panel when the feature is enabled", async ({ page }) => {
+  test("shows the panel when the feature is enabled", async ({
+    page,
+  }) => {
     await page.route("**/feature-flags", async (route) => {
       await route.fulfill({
         status: 200,
@@ -17,7 +19,9 @@ test.describe("Savings spotlight feature flag", () => {
     ).toBeVisible();
   });
 
-  test("hides the panel when the feature is disabled", async ({ page }) => {
+  test("hides the panel when the feature is disabled", async ({
+    page,
+  }) => {
     await page.route("**/feature-flags", async (route) => {
       await route.fulfill({
         status: 200,
