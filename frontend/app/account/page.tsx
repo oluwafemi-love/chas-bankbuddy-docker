@@ -1,41 +1,13 @@
+
 "use client";
 
 import React from "react";
-import {
-  getAccount,
-  depositMoney,
-  getFeatureFlags,
-} from "@/app/lib/client";
+import Link from "next/link";
+import { getAccount } from "@/app/lib/client";
 
 export default function AccountPage() {
-  const [balance, setBalance] = React.useState(0);
-  const [amount, setAmount] = React.useState("");
+  const [balance, setBalance] = React.useState<number | null>(null);
   const [username, setUsername] = React.useState("");
-  const [newDashboardEnabled, setNewDashboardEnabled] =
-    React.useState(false);
-
-  React.useEffect(() => {
-    let active = true;
-
-    async function loadFeatureFlags() {
-      try {
-        const flags = await getFeatureFlags();
-
-        if (active) {
-          setNewDashboardEnabled(flags.newDashboard);
-        }
-      } catch (error) {
-        // Fail closed: keep the feature hidden if flags cannot load.
-        console.error("Failed to load feature flags:", error);
-      }
-    }
-
-    loadFeatureFlags();
-
-    return () => {
-      active = false;
-    };
-  }, []);
 
   React.useEffect(() => {
     async function loadAccount() {
@@ -46,16 +18,10 @@ export default function AccountPage() {
         setUsername(storedUsername);
       }
 
-      if (!token) {
-        console.error("No login token found");
-        return;
-      }
+      if (!token) return;
 
       try {
         const account = await getAccount(token);
-
-        // console.log("ACCOUNT RESPONSE:", account);
-
         setBalance(account.amount);
       } catch (error) {
         console.error("Failed to load account:", error);
@@ -65,121 +31,86 @@ export default function AccountPage() {
     loadAccount();
   }, []);
 
-  async function handleDeposit(
-    event: React.SubmitEvent<HTMLFormElement>,
-  ) {
-    event.preventDefault();
-
-    const token = sessionStorage.getItem("token");
-
-    if (!token) {
-      console.error("No login token found");
-      return;
-    }
-
-    const depositAmount = Number(amount);
-
-    try {
-      const response = await depositMoney({
-        token,
-        amount: depositAmount,
-      });
-
-      // console.log("TRANSACTION RESPONSE:", response);
-
-      setBalance(response.amount);
-      setAmount("");
-    } catch (error) {
-      console.error("Deposit failed:", error);
-    }
-  }
-
   return (
-    <div className="p-4">
-      <h2 className="text-lg font-bold tracking-tight text-gray-50 sm:text-2xl capitalize">
-        Welcome {username}
-      </h2>
-      <div className="mx-auto my-10 max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-xl sm:p-8">
-        {/* Header & Balance Card */}
+    <div className="mx-auto max-w-5xl space-y-8">
+      <header>
+        <p className="text-sm font-medium text-indigo-600">
+          BANKBUDDY DASHBOARD
+        </p>
 
-        <div className="space-y-2">
-          <h1 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
-            Account Overview
-          </h1>
-          <div className="rounded-xl bg-slate-50 p-4 border border-slate-100">
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Available Balance
-            </p>
-            <p className="mt-1 text-3xl font-extrabold text-emerald-600">
-              {balance.toLocaleString()}{" "}
-              <span className="text-lg font-medium text-slate-600">
-                kr
-              </span>
-            </p>
-          </div>
-        </div>
+        <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
+          Welcome{username ? `, ${username}` : ""}
+        </h1>
 
-        <hr className="my-6 border-slate-200" />
+        <p className="mt-2 text-slate-600">
+          Here`&apos;`s an overview of your banking activity.
+        </p>
+      </header>
 
-        {/* Deposit Form */}
-        <form onSubmit={handleDeposit} className="space-y-4">
-          <h2 className="text-lg font-semibold text-slate-800">
-            Deposit Money
-          </h2>
+      {/* Balance summary */}
+      <section className="rounded-2xl bg-indigo-700 p-6 text-white shadow-sm sm:p-8">
+        <p className="text-sm font-medium text-indigo-100">
+          Available Balance
+        </p>
 
-          <div className="space-y-1.5">
-            <label
-              htmlFor="amount"
-              className="block text-sm font-medium text-slate-700"
-            >
-              Amount (kr)
-            </label>
-            <div className="relative">
-              <input
-                id="amount"
-                name="amount"
-                type="number"
-                min="1"
-                step="1"
-                placeholder="0"
-                value={amount}
-                onChange={(event) => setAmount(event.target.value)}
-                className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-slate-900 placeholder-slate-400 shadow-sm transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-base"
-              />
-            </div>
-          </div>
+        <p className="mt-3 text-3xl font-bold sm:text-4xl">
+          {balance === null
+            ? "Loading..."
+            : `${balance.toLocaleString()} kr`}
+        </p>
 
-          <button
-            type="submit"
-            className="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 active:scale-[0.98] disabled:opacity-50"
-          >
-            Deposit
-          </button>
-        </form>
-      </div>
-      {newDashboardEnabled && (
-        <section
-          aria-labelledby="savings-panel-title"
-          className="mx-auto mb-8 max-w-md rounded-2xl border border-emerald-200 bg-emerald-50 p-6 shadow-sm"
+        <Link
+          href="/account/balance"
+          className="mt-6 inline-block rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-50"
         >
-          <p className="text-sm font-semibold uppercase tracking-wider text-emerald-700">
-            New feature
-          </p>
+          Manage Balance
+        </Link>
+      </section>
 
-          <h2
-            id="savings-panel-title"
-            className="mt-2 text-xl font-bold text-slate-900"
+      {/* Quick actions */}
+      <section>
+        <h2 className="mb-4 text-lg font-bold text-slate-900">
+          Quick Access
+        </h2>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <Link
+            href="/account/balance"
+            className="rounded-xl border border-slate-200 bg-white p-5 transition hover:border-indigo-300 hover:shadow-sm"
           >
-            Savings spotlight
-          </h2>
+            <h3 className="font-semibold text-slate-900">
+              Account Balance
+            </h3>
+            <p className="mt-2 text-sm text-slate-600">
+              View your balance and deposit money.
+            </p>
+          </Link>
 
-          <p className="mt-2 text-sm leading-6 text-slate-700">
-            Small, consistent steps can help you build better saving
-            habits. Consider setting a savings goal and reviewing your
-            progress regularly.
-          </p>
-        </section>
-      )}
+          <Link
+            href="/account/history"
+            className="rounded-xl border border-slate-200 bg-white p-5 transition hover:border-indigo-300 hover:shadow-sm"
+          >
+            <h3 className="font-semibold text-slate-900">
+              Account History
+            </h3>
+            <p className="mt-2 text-sm text-slate-600">
+              Review your account transactions.
+            </p>
+          </Link>
+
+          <Link
+            href="/account/notifications"
+            className="rounded-xl border border-slate-200 bg-white p-5 transition hover:border-indigo-300 hover:shadow-sm"
+          >
+            <h3 className="font-semibold text-slate-900">
+              Notifications
+            </h3>
+            <p className="mt-2 text-sm text-slate-600">
+              View your account updates.
+            </p>
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }

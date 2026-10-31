@@ -10,10 +10,19 @@ import type {
   TransactionResponse,
 } from "@/app/types/shared";
 
-export async function createUser(request: CreateUserRequest) {
-  // console.log("createUser called:", request);
-  // console.log("API_URL:", API_URL);
+export interface TransactionHistoryItem {
+  id: number;
+  type: string;
+  amount: number;
+  status: string;
+  created_at: string;
+}
 
+export interface TransactionHistoryResponse {
+  transactions: TransactionHistoryItem[];
+}
+
+export async function createUser(request: CreateUserRequest) {
   const res = await fetch(`${API_URL}/users`, {
     method: "POST",
     headers: {
@@ -21,8 +30,6 @@ export async function createUser(request: CreateUserRequest) {
     },
     body: JSON.stringify(request),
   });
-
-  // console.log("Response received:", res.status, res.url);
 
   if (!res.ok) {
     throw new Error("Failed to create user");
@@ -57,9 +64,7 @@ export async function getAccount(
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      token,
-    }),
+    body: JSON.stringify({ token }),
   });
 
   if (!res.ok) {
@@ -82,6 +87,24 @@ export async function depositMoney(
 
   if (!res.ok) {
     throw new Error("Failed to deposit money");
+  }
+
+  return res.json();
+}
+
+export async function getTransactions(
+  token: string,
+): Promise<TransactionHistoryResponse> {
+  const res = await fetch(`${API_URL}/me/accounts/transactions/history`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token }),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to retrieve transaction history");
   }
 
   return res.json();

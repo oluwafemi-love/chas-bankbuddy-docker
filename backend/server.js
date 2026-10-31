@@ -16,6 +16,7 @@ import {
   createAccount,
   getAccountByUserId,
   depositToAccount,
+  getTransactionsByUserId,
 } from "./models/accounts.js";
 
 const app = express();
@@ -24,6 +25,8 @@ const port = process.env.PORT || 3001;
 // Middleware
 app.use(cors());
 app.use(bodyParser.json({ limit: "100kb" }));
+
+const MYSQL_INT_MAX = 2147483647;
 
 // Public feature flags: expose only safe boolean values.
 app.get("/feature-flags", (req, res) => {
@@ -197,25 +200,24 @@ app.post("/me/accounts/transactions", async (req, res) => {
   try {
     const { token, amount } = req.body;
 
-    //Validate
-    //Input must be inputed
-    if (amount === undefined || !token) {
+    //Validate: Input must be inputed
+    if (!token || amount === undefined) {
       return res.status(400).json({
         message: "Token and amount are required",
       });
     }
 
-    //We accept only positive number
-    if (typeof amount !== "number" || amount <= 0) {
+    //We accept only positive numbers
+    if (!Number.isSafeInteger(amount) || amount <= 0) {
       return res.status(400).json({
-        message: "Amount must be a positive number",
+        message: "Amount must be a positive whole number",
       });
     }
 
     // Find the session belonging to this token
     const session = await getSessionByToken(token);
 
-    // Invalid token
+    //When the token is Invalid
     if (!session) {
       return res.status(401).json({
         message: "Invalid token",
@@ -225,27 +227,63 @@ app.post("/me/accounts/transactions", async (req, res) => {
     // Deposit money into the user's account
     const result = await depositToAccount(session.user_id, amount);
 
-    // Account doesn't exist
-    if (result.affectedRows === 0) {
+    return res.status(200).json({
+      amount: result.amount,
+      message: "Deposit successful",
+    });
+  } catch (error) {
+    console.error("Deposit error:", error);
+
+    if (error.message === "Account not found") {
       return res.status(404).json({
         message: "Account not found",
       });
     }
 
-    // Get the updated account
-    const account = await getAccountByUserId(session.user_id);
+    if (error.message === "Account balance limit exceeded") {
+      return res.status(400).json({
+        message: "Deposit exceeds the maximum account balance",
+      });
+    }
 
-    console.log("💵 Account topped up successfully");
-    // console.log("User ID:", session.user_id);
-    // console.log("Deposited:", amount);
-    // console.log("New balance:", account.balance);
+    return res.status(500).json({
+      message: "Failed to process deposit",
+    });
+  }
+});
+
+//Transaction History Endpoint
+app.post("/me/accounts/transactions/history", async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({
+        message: "Token is required",
+      });
+    }
+
+    const session = await getSessionByToken(token);
+
+    if (!session) {
+      return res.status(401).json({
+        message: "Invalid token",
+      });
+    }
+
+    const transactions = await getTransactionsByUserId(
+      session.user_id,
+    );
 
     return res.status(200).json({
-      amount: account.balance,
+      transactions,
     });
   } catch (error) {
-    console.error("Error depositing money:", error);
-    res.status(500).send(`Error, unable to top up balance`);
+    console.error("Transaction history error:", error);
+
+    return res.status(500).json({
+      message: "Failed to retrieve transaction history",
+    });
   }
 });
 
@@ -325,13 +363,24 @@ app.delete("/users", async (req, res) => {
     return res.status(200).json({
       message: "User deleted successfully.",
     });
-  } catch (error) {
-    console.error("Error deleting user:", error);
+ } catch (error) {
+  console.error("Error deleting user:", error);
 
-    return res.status(500).json({
-      message: "Unable to delete user.",
+  // Prevent deletion when the user has transaction history.
+  if (
+    error.code === "ER_ROW_IS_REFERENCED_2" ||
+    error.errno === 1451
+  ) {
+    return res.status(409).json({
+      message:
+        "This account has transaction history and cannot be deleted.",
     });
   }
+
+  return res.status(500).json({
+    message: "Unable to delete user.",
+  });
+}
 });
 
 // Centralized JSON error handling
@@ -342,7 +391,8 @@ app.use((error, req, res, next) => {
 
   if (error.type === "entity.too.large") {
     return res.status(413).json({
-      message: "Request body exceeds the maximum allowed size of 100kb.",
+      message:
+        "Request body exceeds the maximum allowed size of 100kb.",
     });
   }
 
