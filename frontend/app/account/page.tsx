@@ -54,7 +54,7 @@ return (
       </h1>
 
       <p className="mt-2 text-muted-foreground">
-        Here's an overview of your banking activity.
+        Here&apos;s an overview of your banking activity.
       </p>
     </header>
 
