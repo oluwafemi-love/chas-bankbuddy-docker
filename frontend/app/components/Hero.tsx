@@ -50,7 +50,7 @@ export default function Hero({
           {primaryCtaText && primaryCtaLink && (
             <Link
               href={primaryCtaLink}
-              className={`${buttonStyles} bg-brand text-white hover:bg-brand-hover`}
+              className={`${buttonStyles} bg-brand text-foreground hover:bg-primary-hover`}
             >
               {primaryCtaText}
             </Link>
@@ -59,7 +59,7 @@ export default function Hero({
           {secondaryCtaText && secondaryCtaLink && (
             <Link
               href={secondaryCtaLink}
-              className={`${buttonStyles} border border-(--border-default) bg-transparent text-(--text-secondary) hover:bg-subtle`}
+              className={`${buttonStyles} border border-(--border-default) bg-transparent text-(--text-secondary) hover:bg-primary-hover`}
             >
               {secondaryCtaText}
             </Link>

@@ -1,37 +1,131 @@
+
 @import "tailwindcss";
 
+/* =========================================
+   BANKBUDDY DESIGN SYSTEM
+   Default: Light theme
+========================================= */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+
+  /* Brand palette */
+  --brand-blue: #006ECF;
+  --brand-blue-deep: #004C94;
+  --brand-blue-bright: #3C93FA;
+
+  --brand-navy: #2D3F54;
+  --brand-slate: #52647A;
+
+  --brand-green: #73CC80;
+  --brand-teal: #00D4C6;
+  --brand-teal-medium: #0FA69D;
+  --brand-teal-deep: #028183;
+
+  /* Semantic colours */
+  --background: #F5F8FC;
+  --foreground: #14263A;
+
+  --surface: #FFFFFF;
+  --surface-muted: #E8EFF6;
+
+  --muted-foreground: #52647A;
+  --border: #75899F;
+
+  --primary: #006ECF;
+  --primary-hover: #004C94;
+  --primary-foreground: #FFFFFF;
+
+  --accent: #E1F5F3;
+  --accent-foreground: #006B66;
+
+  --success: #287A3A;
+  --success-muted: #E6F5E9;
+
+  --danger: #B42318;
+  --danger-muted: #FEECEB;
+
+  --focus-ring: #006ECF;
 }
 
- @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-} 
+/* =========================================
+   DARK THEME
+========================================= */
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: dark;
+
+    --background: #0B1623;
+    --foreground: #F7FAFF;
+
+    --surface: #17283B;
+    --surface-muted: #22364B;
+
+    --muted-foreground: #C1D0E0;
+    --border: #60758B;
+
+    --primary: #3C93FA;
+    --primary-hover: #73B6FF;
+    --primary-foreground: #071827;
+
+    --accent: #173C42;
+    --accent-foreground: #00D4C6;
+
+    --success: #73CC80;
+    --success-muted: #193B2B;
+
+    --danger: #FF8B82;
+    --danger-muted: #492523;
+
+    --focus-ring: #73B6FF;
   }
 }
 
+/* =========================================
+   TAILWIND CSS THEME MAPPING
+========================================= */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-success: var(--success);
+  --color-success-muted: var(--success-muted);
+
+  --color-danger: var(--danger);
+  --color-danger-muted: var(--danger-muted);
+
+  --color-focus-ring: var(--focus-ring);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* =========================================
+   GLOBAL STYLES
+========================================= */
+
+html {
+  background: var(--background);
+}
+
 body {
+  min-height: 100vh;
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
-
-
-
-body{
-  color: #fcfcfc;
-}
-
-
-
-

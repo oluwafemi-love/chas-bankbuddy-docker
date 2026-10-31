@@ -78,22 +78,22 @@ export default function BalancePage() {
   return (
     <div className="mx-auto max-w-3xl space-y-8">
       <header>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">
           Account Balance
         </h1>
 
-        <p className="mt-2 text-slate-600">
+        <p className="mt-2 text-foreground">
           View and manage your available funds.
         </p>
       </header>
 
       {/* Balance card */}
-      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-        <p className="text-sm font-semibold uppercase tracking-wider text-slate-500">
+      <section className="rounded-2xl bg-background p-6 shadow-2xs sm:p-8">
+        <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
           Available Balance
         </p>
 
-        <p className="mt-3 text-4xl font-bold text-emerald-600">
+        <p className="mt-3 text-4xl font-bold text-success">
           {loading
             ? "Loading..."
             : balance === null
@@ -103,12 +103,12 @@ export default function BalancePage() {
       </section>
 
       {/* Deposit form */}
-      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-        <h2 className="text-xl font-bold text-slate-900">
+      <section className="rounded-2xl border border-slate-200 bg-background p-6 shadow-2xs sm:p-8">
+        <h2 className="text-xl font-bold text-foreground">
           Deposit Money
         </h2>
 
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="mt-2 text-sm text-muted-foreground">
           Add funds to your account.
         </p>
 
@@ -116,7 +116,7 @@ export default function BalancePage() {
           <div>
             <label
               htmlFor="amount"
-              className="mb-2 block text-sm font-medium text-slate-700"
+              className="mb-2 block text-sm font-medium text-muted-foreground"
             >
               Deposit Amount (kr)
             </label>
@@ -131,7 +131,7 @@ export default function BalancePage() {
               placeholder="Enter amount"
               value={amount}
               onChange={(event) => setAmount(event.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+              className="w-full rounded-lg border border-border px-4 py-3 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary"
             />
           </div>
 
@@ -150,7 +150,7 @@ export default function BalancePage() {
           <button
             type="submit"
             disabled={loading || depositing || balance === null}
-            className="w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
           >
             {depositing ? "Processing..." : "Deposit Money"}
           </button>

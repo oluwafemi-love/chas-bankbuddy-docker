@@ -41,12 +41,12 @@ export default function LoginPage() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mx-auto flex w-full max-w-md flex-col gap-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm"
+      className="mx-auto flex w-full max-w-md flex-col gap-6 rounded-xl border border-gray-200 bg-background p-6 shadow-sm"
     >
       <div className="flex flex-col gap-2">
         <label
           htmlFor="username"
-          className="text-sm font-medium text-gray-700"
+          className="text-sm font-medium text-foreground"
         >
           Username
         </label>
@@ -60,12 +60,11 @@ export default function LoginPage() {
           required
           value={username}
           onChange={(event) => setUsername(event.target.value)}
-          className="rounded-lg border border-gray-300 px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+          className="rounded-lg border border-gray-300 px-4 py-3 text-foreground outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
         />
 
-        <span className="text-sm leading-5 text-gray-500">
-          Your username by default is your firstname-lastname.
-          <br />
+        <span className="text-sm leading-5 text-muted-foreground">
+          Your username by default is your firstname-lastname, if you have not set it.
           Example: John Smith → john-smith
         </span>
       </div>
@@ -73,7 +72,7 @@ export default function LoginPage() {
       <div className="flex flex-col gap-2">
         <label
           htmlFor="password"
-          className="text-sm font-medium text-gray-700"
+          className="text-sm font-medium text-foreground"
         >
           Password
         </label>
@@ -86,13 +85,13 @@ export default function LoginPage() {
           required
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          className="rounded-lg border border-gray-300 px-4 py-3 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+          className="rounded-lg border border-gray-300 px-4 py-3 text-foreground outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
         />
       </div>
 
       <button
         type="submit"
-        className="rounded-lg bg-blue-600 px-4 py-3 font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:bg-blue-800"
+        className="rounded-lg bg-primary px-4 py-3 font-medium text-primary-foreground transition hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:bg-blue-800"
       >
         Login
       </button>

@@ -36,13 +36,13 @@ export default function AccountLayout({
   return (
     <div className="flex flex-1 flex-col bg-slate-100 text-slate-900 md:flex-row">
       {/* Dashboard sidebar */}
-      <aside className="w-full border-b border-slate-200 bg-white md:min-h-full md:w-64 md:border-b-0 md:border-r">
+      <aside className="w-full border-b border-border bg-background md:min-h-full md:w-64 md:border-b-0 md:border-r-0">
         <div className="p-5">
-          <h2 className="text-lg font-bold tracking-tight text-slate-900">
+          <h2 className="text-lg font-bold tracking-tight text-foreground">
             Dashboard
           </h2>
 
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-foreground">
             Manage your finances
           </p>
         </div>
@@ -64,7 +64,7 @@ export default function AccountLayout({
                 aria-current={isActive ? "page" : undefined}
                 className={`whitespace-nowrap rounded-lg px-4 py-3 text-sm font-medium transition ${
                   isActive
-                    ? "bg-indigo-50 text-indigo-700"
+                    ? "bg-indigo-50 text-primary font-medium"
                     : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
                 }`}
               >
@@ -76,7 +76,7 @@ export default function AccountLayout({
       </aside>
 
       {/* Main dashboard content */}
-      <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">
+      <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8 bg-surface">
         {children}
       </main>
     </div>

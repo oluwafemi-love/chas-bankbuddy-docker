@@ -38,13 +38,13 @@ export default function RegisterPage() {
 
   return (
     <form
-      className="mx-auto my-8 flex w-full max-w-md flex-col gap-5 rounded-xl border border-gray-200 bg-white p-6 shadow-sm"
+      className="mx-auto my-8 flex w-full max-w-md flex-col gap-5 rounded-xl border border-gray-200 bg-background p-6 shadow-sm"
       onSubmit={(event) => handleSubmit(event)}
     >
       <div className="flex flex-col gap-2">
         <label
           htmlFor="user-first-name"
-          className="text-sm font-medium text-gray-700"
+          className="text-sm font-medium text-foreground"
         >
           First Name
         </label>
@@ -54,7 +54,7 @@ export default function RegisterPage() {
           name="user-first-name"
           id="user-first-name"
           placeholder="Your First Name"
-          className="rounded-lg border border-gray-300 px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+          className="rounded-lg border border-gray-300 px-4 py-3 text-foreground outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
           value={firstName}
           autoComplete="name"
           onChange={(event) => setFirstName(event.target.value)}
@@ -64,7 +64,7 @@ export default function RegisterPage() {
       <div className="flex flex-col gap-2">
         <label
           htmlFor="user-last-name"
-          className="text-sm font-medium text-gray-700"
+          className="text-sm font-medium text-foreground"
         >
           Last Name
         </label>
@@ -74,7 +74,7 @@ export default function RegisterPage() {
           name="user-last-name"
           id="user-last-name"
           placeholder="Your Last Name"
-          className="rounded-lg border border-gray-300 px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+          className="rounded-lg border border-gray-300 px-4 py-3 text-foreground outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
           value={lastName}
           autoComplete="name"
           onChange={(event) => setLastName(event.target.value)}
@@ -84,7 +84,7 @@ export default function RegisterPage() {
       <div className="flex flex-col gap-2">
         <label
           htmlFor="username"
-          className="text-sm font-medium text-gray-700"
+          className="text-sm font-medium text-foreground"
         >
           Username
         </label>
@@ -94,7 +94,7 @@ export default function RegisterPage() {
           name="username"
           id="username"
           placeholder="Your Username"
-          className="rounded-lg border border-gray-300 px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+          className="rounded-lg border border-gray-300 px-4 py-3 text-foreground outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
           value={username}
           onChange={(event) => setUsername(event.target.value)}
         />
@@ -103,7 +103,7 @@ export default function RegisterPage() {
       <div className="flex flex-col gap-2">
         <label
           htmlFor="password"
-          className="text-sm font-medium text-gray-700"
+          className="text-sm font-medium text-foreground"
         >
           Password
         </label>
@@ -112,7 +112,7 @@ export default function RegisterPage() {
           type="password"
           name="password"
           id="password"
-          className="rounded-lg border border-gray-300 px-4 py-3 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+          className="rounded-lg border border-gray-300 px-4 py-3 text-foreground outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
@@ -120,7 +120,7 @@ export default function RegisterPage() {
 
       <button
         type="submit"
-        className="mt-2 rounded-lg bg-blue-600 px-4 py-3 font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:bg-blue-800"
+        className="mt-2 rounded-lg bg-blue-600 px-4 py-3 font-medium text-foreground transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:bg-blue-800"
       >
         Create Account
       </button>

@@ -24,7 +24,7 @@ export default function LinkButton({
 
   // 4. Variant-specific styles
   const variantStyles: Record<ButtonVariant, string> = {
-    filled: "bg-brand text-white hover:bg-brand-hover",
+    filled: "bg-brand text-foreground hover:bg-brand-hover",
     outline:
       "border border-(--border-default) text-(--text-secondary) bg-transparent hover:bg-canvas active:bg-subtle",
     ghost:
